@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clonedupe Base Database</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Clonedupe Base Database</h1>
+        <h2>Report a Base</h2>
+        <form id="reportForm">
+            <input type="text" id="baseId" placeholder="Base ID (e.g., 1, 2, 3)" required>
+            <textarea id="baseDetails" placeholder="Enter base details here..." required></textarea>
+            <button type="submit">Submit Report</button>
+        </form>
+        <h2>Base List</h2>
+        <div class="base-list" id="baseList"></div>
+    </div>
+
+    <script>
+        document.getElementById('reportForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const baseId = document.getElementById('baseId').value;
+            const baseDetails = document.getElementById('baseDetails').value;
+            fetch('/report', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ baseId, baseDetails })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Report submitted');
+                document.getElementById('baseList').innerHTML += '<div>' + data.baseId + ': ' + data.baseDetails + '</div>';
+            })
+            .catch(error => {
+                alert('Error sending report');
+            });
+        });
+    </script>
+</body>
+</html>
